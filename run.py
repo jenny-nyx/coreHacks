@@ -1,5 +1,4 @@
-import Controller
-import pygame
+import Controller, pygame
 
 def runGame():
     pygame.init()
