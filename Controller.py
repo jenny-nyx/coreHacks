@@ -79,7 +79,7 @@ class Controller:
     while True:
       mouseLocation = pygame.mouse.get_pos()
       self.state = "choose"
-      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "imgages/choose.png")), (self.height, self.width))
+      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/choose.png")), (self.height, self.width))
       self.screen.blit(image, (0,0))
       for s in self.char_buttons:
         self.screen.blit(s.image, s.rect.topleft)
