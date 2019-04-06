@@ -1,0 +1,1 @@
+char_image = {'jenny': '#png here', 'alex': '#png here'}

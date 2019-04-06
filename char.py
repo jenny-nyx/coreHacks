@@ -2,13 +2,13 @@ import pygame
 import Controller
 
 class Char():
-  def __init__(self, screen, strength, weakness, blessing):
+  def __init__(self, screen, strength, weakness, blessing, char):
     self.screen = screen
     self.strength = strength
     self.weakness = weakness
     self.blessing = blessing
 
-    self.image = pygame.image.load('char.png')
+    self.image = pygame.image.load(char_image[char])
     self.rect = self.image.get_rect()
     self.screen_rect = screen.get_rect()
 
