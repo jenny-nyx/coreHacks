@@ -1,4 +1,4 @@
-import time, pygame, os, buttons, char
+import time, pygame, os, buttons, char, sys
 
 class Controller:
   def __init__(self, height = 1920, width=1080):
@@ -9,8 +9,6 @@ class Controller:
     self.buttons = pygame.sprite.Group()
     self.startButton = buttons.Button('startButton', (220, 450), "startButton.png")
     self.quitButton = buttons.Button('helpButton', (700, 450), "quitButton.png")
-    self.coreLounge = buttons.Button('coreLounge', (700, 3000), 'coreLounge.png')
-    self.buttons.add(self.coreLounge)
     self.buttons.add(self.startButton)
     self.buttons.add(self.quitButton)
     self.all_sprites = pygame.sprite.Group((self.buttons))
@@ -56,7 +54,6 @@ class Controller:
   def startingMenu(self):
     image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "startUpMenu.png")), (self.height, self.width))
     self.screen.blit(image, (0, 0))
-    pygame.display.flip()
     for s in self.buttons:
       self.screen.blit(s.image, s.rect.topleft)
     pygame.display.flip()
@@ -64,7 +61,10 @@ class Controller:
   def spawnRoom(self):
     image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "spawn.png")), (self.height, self.width))
     self.screen.blit(image, (0,0))
+    coreLounge = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "coreLounge.png")), (400, 300))
+    self.screen.blit(coreLounge, (700, 300))
     pygame.display.flip()
+
 
 
   #def spawnPizza(self):
