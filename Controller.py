@@ -17,6 +17,7 @@ class Controller:
     self.char_buttons.add(self.girl_button)
     self.char_buttons.add(self.boy_button)
 
+
   def mainLoop(self):
     while True:
       if (self.state == "start"):
@@ -63,13 +64,16 @@ class Controller:
             pygame.quit
             sys.exit()
 
-  def spawnRoom(self):
+  def spawnRoom(self, chosen):
     while True:
+      self.chosen = chosen
       self.state = "spawn"
       image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/spawn.png")), (self.height, self.width))
       self.screen.blit(image, (0,0))
       coreLounge = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/coreLounge.png")), (400, 300))
       self.screen.blit(coreLounge, (700, 300))
+      player = char.Char(self.screen, self.chosen)
+      player.blitme()
       pygame.display.flip()
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -89,12 +93,12 @@ class Controller:
           sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
           if self.girl_button.rect.collidepoint(mouseLocation):
-            char = 'jenny'
-            self.spawnRoom()
+            chosen = 'jenny'
+            self.spawnRoom(chosen)
             return None
           elif self.boy_button.rect.collidepoint(mouseLocation):
-            char = 'alex'
-            self.spawnRoom()
+            chosen = 'alex'
+            self.spawnRoom(chosen)
             return None
 
 
