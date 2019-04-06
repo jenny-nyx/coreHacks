@@ -15,5 +15,8 @@ def run_game():  # Initializes game and creates screen object
 
     pygame.display.flip()
 
+  def startingMenu():
+    image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "startUpMenu.png")), (game_settings.width, game_settings.height))
+    screen.blit(image, (0, 0))
 
 run_game()
