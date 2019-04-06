@@ -1,4 +1,4 @@
-import sys, pygame, os
+import sys, pygame, os, buttons
 
 class Controller:
   def __init__(self, height = 1920, width=1080):
@@ -6,6 +6,12 @@ class Controller:
     self.height = height;
     self.width = width;
     self.screen = pygame.display.set_mode((self.height, self.width));
+    self.buttons = pygame.sprite.Group()
+    self.startButton = buttons.Button('startButton', (220, 450), "startButton.png")
+    self.quitButton = buttons.Button('helpButton', (700, 450), "quitButton.png")
+    self.buttons.add(self.startButton)
+    self.buttons.add(self.quitButton)
+    self.all_sprites = pygame.sprite.Group((self.buttons))
 
   def mainLoop(self):
     while True:
@@ -18,7 +24,18 @@ class Controller:
 
   def gameLoop(self):
     while self.state == "game":
-      for event in pygame.event.get()
+      self.startingMenu()
+      for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+          mouseLocation = pygame.mouse.get_pos()
+          if self.startButton.rect.collidepoint(mouseLocation):
+            print("start")
+          if self.quitButton.rect.collidepoint(mouseLocation):
+            pygame.quit
+            sys.exit()
+      pygame.display.flip()
+      self.all_sprites.draw(self.screen)
+
 
   def gameWon(self):
     #self.state == gamewon
@@ -33,3 +50,11 @@ class Controller:
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
           sys.exit();
+
+  def startingMenu(self):
+    image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "startUpMenu.png")), (self.height, self.width))
+    self.screen.blit(image, (0, 0))
+    pygame.display.flip()
+    for s in self.buttons:
+      self.screen.blit(s.image, s.rect.topleft)
+    pygame.display.flip()
