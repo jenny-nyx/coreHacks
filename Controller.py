@@ -60,12 +60,12 @@ class Controller:
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
           sys.exit()
-        if self.startButton.rect.collidepoint(mouseLocation):
-          self.spawnRoom()
-          return None
-        if self.quitButton.rect.collidepoint(mouseLocation):
-          pygame.quit
-          sys.exit()          
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+          if self.startButton.rect.collidepoint(mouseLocation):
+            self.spawnRoom()
+          elif self.quitButton.rect.collidepoint(mouseLocation):
+            pygame.quit
+            sys.exit()
 
   def spawnRoom(self):
     self.state = "game"
