@@ -1,10 +1,11 @@
 import sys
 import pygame
+from settings import Settings
 
 def run_game():  # Initializes game and creates screen object
   pygame.init()
-  wn = pygame.display.set_mode((1200,800))
-  pygame.display.set_caption("Core Boiz")
+  game_settings = Settings()
+  wn = pygame.display.set_mode((game_settings.width, game_settings.height))
 
   # Main loop for game
   while True:
