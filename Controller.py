@@ -8,13 +8,12 @@ class Controller:
     self.screen = pygame.display.set_mode((self.height, self.width));
     self.char_buttons = pygame.sprite.Group()
     self.start_buttons = pygame.sprite.Group()
-    self.startButton = buttons.Button('startButton', (220, 450), "startButton.png")
-    self.quitButton = buttons.Button('helpButton', (700, 450), "quitButton.png")
+    self.startButton = buttons.Button('startButton', (220, 450), "images/startButton.png")
+    self.quitButton = buttons.Button('helpButton', (700, 450), "images/quitButton.png")
     self.start_buttons.add(self.startButton)
     self.start_buttons.add(self.quitButton)
-    self.all_sprites = pygame.sprite.Group((self.start_buttons))
-    self.girl_button = buttons.Button('girl_button', (220, 450), "girl.png")
-    self.boy_button = buttons.Button('boy_button', (700, 450), 'boy.png')
+    self.girl_button = buttons.Button('girl_button', (220, 450), "images/girl.png")
+    self.boy_button = buttons.Button('boy_button', (700, 450), 'images/boy.png')
     self.char_buttons.add(self.girl_button)
     self.char_buttons.add(self.boy_button)
 
@@ -24,23 +23,12 @@ class Controller:
         self.startingMenu()
       if (self.state == "choose"):
         self.chooseChar()
-      if (self.state == "game"):
+      if (self.state == "spawn"):
         self.gameLoop();
       if (self.state == "gameover"):
         self.gameOver()
       if (self.state == "gamewon"):
         self.gameWon()
-
-  def gameLoop(self):
-    while self.state == "game":
-      for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-          mouseLocation = pygame.mouse.get_pos()
-        if event.type == pygame.QUIT:
-          sys.exit()
-      pygame.display.flip()
-      self.all_sprites.draw(self.screen)
-
 
   def gameWon(self):
     #self.state == gamewon
@@ -59,7 +47,7 @@ class Controller:
   def startingMenu(self):
     while True:
       mouseLocation = pygame.mouse.get_pos()
-      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "startUpMenu.png")), (self.height, self.width))
+      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/startUpMenu.png")), (self.height, self.width))
       self.screen.blit(image, (0, 0))
       for s in self.start_buttons:
         self.screen.blit(s.image, s.rect.topleft)
@@ -76,18 +64,22 @@ class Controller:
             sys.exit()
 
   def spawnRoom(self):
-    self.state = "game"
-    image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "spawn.png")), (self.height, self.width))
-    self.screen.blit(image, (0,0))
-    coreLounge = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "coreLounge.png")), (400, 300))
-    self.screen.blit(coreLounge, (700, 300))
-    pygame.display.flip()
+    while True:
+      self.state = "spawn"
+      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/spawn.png")), (self.height, self.width))
+      self.screen.blit(image, (0,0))
+      coreLounge = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/coreLounge.png")), (400, 300))
+      self.screen.blit(coreLounge, (700, 300))
+      pygame.display.flip()
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          sys.exit()
 
   def chooseChar(self):
     while True:
       mouseLocation = pygame.mouse.get_pos()
       self.state = "choose"
-      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "choose.png")), (self.height, self.width))
+      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "/imgageschoose.png")), (self.height, self.width))
       self.screen.blit(image, (0,0))
       for s in self.char_buttons:
         self.screen.blit(s.image, s.rect.topleft)

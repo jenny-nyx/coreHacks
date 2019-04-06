@@ -1,1 +1,1 @@
-char_image = {'jenny': '#png here', 'alex': '#png here'}
+char_image = {'jenny': 'images/jenny.png', 'alex': 'images/alex.png'}
