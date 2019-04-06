@@ -1,3 +1,5 @@
-def main():
+import pygame;
 
+def main():
+    
 main()
