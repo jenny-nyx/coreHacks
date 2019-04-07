@@ -1,8 +1,19 @@
-import time, pygame, os, buttons, char, sys, random, pizza, door
+import time, pygame, pygame.freetype, os, buttons, char, sys, random, pizza, door, eztext
+from pygame.locals import *
 
 class Controller:
   def __init__(self, height = 1280, width=800):
     pygame.display.set_caption("The Best Core Project, No Contest")
+    global flag
+    flag = False
+    global key1
+    key1 = False
+    global key2
+    key2 = False
+    global health
+    health = 100
+    global counter
+    counter = 0
     self.state = "start"
     self.height = height
     self.width = width
@@ -110,6 +121,11 @@ class Controller:
       x = player.rect.centerx
       y = player.rect.centery
       if self.collide(player, wisp) == True:
+        global health
+        if health < 100:
+          health += 5
+        global counter
+        counter += 1
         self.spawnRoom(chosen, x, y)
         return None
       if self.collide(player, gateway) == True:
@@ -146,12 +162,18 @@ class Controller:
         return None
 
   def adamRoom(self):
+    global flag
+    global key1
     player = char.Char(self.screen, pick, 300, 550)
     adam = char.Char(self.screen, 'adam', 1280, 450)
     storage_adam = char.Char(self.screen, 'adam', 20, 430)
     sleeping_adam1 = char.Char(self.screen, 'adam', 500, 100)
-    working_adam = char.Char(self.screen, 'adam', 1190, 450)
+    working_adam = char.Char(self.screen, 'adam', 1165, 450)
     backDoor = door.Door(self.screen, 640, 800)
+    baseFont = pygame.font.SysFont(None, 30)
+##    Ffont = pygame.font.SysFont("Comic Sans MS", 30)
+    question = eztext.Input(maxlength = 40, color=(0, 0, 0), prompt="what is your guess?: ")
+
 
     while True:
       self.check_events(player)
@@ -173,16 +195,37 @@ class Controller:
         self.spawnRoom(pick, 640, 400)
         return None
       elif self.collide(player, sleeping_adam1) == True:
-        self.spawnRoom(pick, 640, 400)
-        return None
+        if flag == False:
+            self.spawnRoom(pick, 640, 400)
+            return None
+        elif flag == True:
+            self.firstHallway()
+            key1 = True
+            return None
       elif self.collide(player, working_adam) == True:
         self.spawnRoom(pick, 640, 400)
         return None
-      #elif self.collide(player, adam) == True:
+      elif flag == True:
+        whatever = baseFont.render("how dare you disturb me", True, (0, 0, 0))
+        prompt = baseFont.render("what is the correct answer?", True, (0, 0, 0))
+
+        whateverRect = whatever.get_rect()
+        promptRect = prompt.get_rect()
+        whateverRect.top = 500
+        promptRect.top = 600
+        whateverRect.right = 700
+        promptRect.right = 700
+
+        self.screen.blit(whatever, whateverRect)
+        self.screen.blit(prompt, promptRect)
+        pygame.display.flip()
+
+      elif self.collide(player, adam) == True:
+        flag = True
 
   def henryRoom(self):
     player = char.Char(self.screen, pick, 300, 700)
-    #henry = char.Char(self.screen, 'henry', 470, 400)
+    henry = char.Char(self.screen, 'henry', 470, 400)
     backDoor = door.Door(self.screen, 0, 800)
 
     while True:
@@ -193,7 +236,8 @@ class Controller:
       player.update()
       self.updateScreen(image, player)
       backDoor.blitme()
-      #henry.blitme()
+      henry.blitme()
+      pygame.display.flip()
       if self.collide(player, backDoor) == True:
         self.firstHallway()
         return None
@@ -203,8 +247,11 @@ class Controller:
 
   def check_events(self, player):
     for event in pygame.event.get():
+      global health
       if event.type == pygame.QUIT:
         sys.exit()
+      elif health <= 0:
+        self.gameOver()
       elif event.type == pygame.KEYDOWN:
         if event.key == pygame.K_RIGHT:
           player.moving_right = True
@@ -228,6 +275,7 @@ class Controller:
   def updateScreen(self, image, object):
     self.screen.blit(image, (0,0))
     object.blitme()
+    pygame.display.set_caption("The Best Core Project, No Contest. HP: {}% Pizza Count: {}".format(health, counter))
     pygame.display.flip()
 
   def blitPizza(self, wisp):
