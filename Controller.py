@@ -72,11 +72,11 @@ class Controller:
       self.screen.blit(image, (0,0))
       coreLounge = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/coreLounge.png")), (400, 300))
       self.screen.blit(coreLounge, (700, 300))
-      player = char.Char(self.screen, self.chosen)
-      player.blitme()
+      player =  char.Char(self.screen, self.chosen)
+      self.update(image, player)
       self.check_events(player)
       pygame.display.flip()
-        
+
 
   def chooseChar(self):
     while True:
@@ -101,13 +101,23 @@ class Controller:
             return None
 
   def check_events(self, player):
+    key = pygame.key.get_pressed()
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         sys.exit()
       elif event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_RIGHT:
-          player.rect.centerx += 1
-        elif event.key == pygame.K_LEFT:
-          player.rect.centerx -= 1
+        if key[pygame.K_RIGHT]:
+          player.moving_right = True
+        elif key[pygame.K_LEFT]:
+          player.moving_left = True
+      elif event.type == pygame.KEYUP:
+        if key[pygame.K_RIGHT]:
+          player.moving_right = False
+        elif key[pygame.K_LEFT]:
+          player.moving_left = False
 
-  #def spawnPizza(self):
+
+  def update(self, image, object):
+    self.screen.blit(image, (0,0))
+    object.blitme()
+    pygame.display.flip()
