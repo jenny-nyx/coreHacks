@@ -117,7 +117,7 @@ class Controller:
           player.moving_left = False
 
 
-  def update(self, image, object):
+  def updateScreen(self, image, object):
     self.screen.blit(image, (0,0))
     object.blitme()
     pygame.display.flip()

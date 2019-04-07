@@ -25,6 +25,6 @@ class Char():
 
   def update(self):
     if self.moving_right:
-      self.rect.centerx += 1
+      self.rect.centerx += 25
     if self.moving_left:
-      self.rect.centerx -= 1
+      self.rect.centerx -= 25
