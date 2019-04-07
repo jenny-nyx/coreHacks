@@ -1,4 +1,4 @@
-import time, pygame, os, buttons, char, sys, random, pizza
+import time, pygame, os, buttons, char, sys, random, pizza, door
 
 class Controller:
   def __init__(self, height = 1280, width=800):
@@ -67,6 +67,7 @@ class Controller:
     self.chosen = chosen
     player = char.Char(self.screen, self.chosen)
     wisp = pizza.Pizza(self.screen)
+    gateway = door.Door(self.screen)
     while True:
       self.check_events(player)
       self.state = "spawn"
@@ -75,10 +76,8 @@ class Controller:
       coreLounge = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/coreLounge.png")), (400, 300))
       self.screen.blit(coreLounge, (700, 300))
       player.update()
-      self.updateScreen(image, player)
+      self.updateScreen(image, player, gateway)
       self.blitPizza(wisp)
-
-
 
   def chooseChar(self):
     while True:
@@ -125,9 +124,11 @@ class Controller:
         elif event.key == pygame.K_DOWN:
           player.moving_down = False
 
-  def updateScreen(self, image, object):
+
+  def updateScreen(self, image, object, door):
     self.screen.blit(image, (0,0))
     object.blitme()
+    door.blitme()
     pygame.display.flip()
 
   def blitPizza(self, wisp):
