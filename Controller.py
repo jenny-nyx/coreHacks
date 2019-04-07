@@ -25,7 +25,7 @@ class Controller:
       if (self.state == "choose"):
         self.chooseChar()
       if (self.state == "spawn"):
-        self.gameLoop();
+        self.spawnRoom();
       if (self.state == "gameover"):
         self.gameOver()
       if (self.state == "gamewon"):
@@ -65,17 +65,17 @@ class Controller:
             sys.exit()
 
   def spawnRoom(self, chosen):
+    self.chosen = chosen
+    player = char.Char(self.screen, self.chosen)
     while True:
-      self.chosen = chosen
+      self.check_events(player)
       self.state = "spawn"
       image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/spawn.png")), (self.height, self.width))
       self.screen.blit(image, (0,0))
       coreLounge = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/coreLounge.png")), (400, 300))
       self.screen.blit(coreLounge, (700, 300))
-      player =  char.Char(self.screen, self.chosen)
-      self.update(image, player)
-      self.check_events(player)
-      pygame.display.flip()
+      player.update()
+      self.updateScreen(image, player)
 
 
   def chooseChar(self):
@@ -101,19 +101,18 @@ class Controller:
             return None
 
   def check_events(self, player):
-    key = pygame.key.get_pressed()
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         sys.exit()
       elif event.type == pygame.KEYDOWN:
-        if key[pygame.K_RIGHT]:
+        if event.key == pygame.K_RIGHT:
           player.moving_right = True
-        elif key[pygame.K_LEFT]:
+        elif event.key == pygame.K_LEFT:
           player.moving_left = True
       elif event.type == pygame.KEYUP:
-        if key[pygame.K_RIGHT]:
+        if event.key == pygame.K_RIGHT:
           player.moving_right = False
-        elif key[pygame.K_LEFT]:
+        elif event.key == pygame.K_LEFT:
           player.moving_left = False
 
 
