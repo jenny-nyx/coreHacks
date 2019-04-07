@@ -3,7 +3,7 @@ import Controller
 import dictionaries
 
 class Char():
-  def __init__(self, screen, char):
+  def __init__(self, screen, char, x, y):
     self.screen = screen
     self.strength = dictionaries.char_strengths[char]
     self.real_weakness = dictionaries.char_weaknesses[char][0]
@@ -14,8 +14,8 @@ class Char():
     self.rect = self.image.get_rect()
     self.screen_rect = screen.get_rect()
 
-    self.rect.centerx = self.screen_rect.centerx
-    self.rect.bottom = self.screen_rect.bottom
+    self.rect.centerx = x
+    self.rect.centery = y
 
     self.moving_right = False
     self.moving_left = False

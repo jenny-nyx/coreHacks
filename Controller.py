@@ -25,6 +25,8 @@ class Controller:
         self.chooseChar()
       if (self.state == "spawn"):
         self.spawnRoom()
+      if (self.state == "first hallway"):
+        self.firstHallway()
       if (self.state == "gameover"):
         self.gameOver()
       if (self.state == "gamewon"):
@@ -63,23 +65,8 @@ class Controller:
             pygame.quit
             sys.exit()
 
-  def spawnRoom(self, chosen):
-    self.chosen = chosen
-    player = char.Char(self.screen, self.chosen)
-    wisp = pizza.Pizza(self.screen)
-    gateway = door.Door(self.screen, 0, 0)
-    while True:
-      self.check_events(player)
-      self.state = "spawn"
-      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/spawn.png")), (self.height, self.width))
-      self.screen.blit(image, (0,0))
-      coreLounge = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/coreLounge.png")), (400, 300))
-      self.screen.blit(coreLounge, (700, 300))
-      player.update()
-      self.updateScreen(image, player, gateway)
-      self.blitPizza(wisp)
-
   def chooseChar(self):
+    global pick
     while True:
       mouseLocation = pygame.mouse.get_pos()
       self.state = "choose"
@@ -93,13 +80,46 @@ class Controller:
           sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
           if self.girl_button.rect.collidepoint(mouseLocation):
-            chosen = 'jenny'
-            self.spawnRoom(chosen)
+            pick = 'jenny'
+            self.spawnRoom(pick, 640, 400)
             return None
           elif self.boy_button.rect.collidepoint(mouseLocation):
-            chosen = 'alex'
-            self.spawnRoom(chosen)
+            pick = 'alex'
+            self.spawnRoom(pick, 640, 400)
             return None
+
+  def spawnRoom(self, chosen, x, y):
+    self.chosen = chosen
+    player = char.Char(self.screen, self.chosen, x, y)
+    wisp = pizza.Pizza(self.screen)
+    gateway = door.Door(self.screen, 0, 0)
+    while True:
+      self.check_events(player)
+      self.state = "spawn"
+      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/spawn.png")), (self.height, self.width))
+      self.screen.blit(image, (0,0))
+      player.update()
+      self.updateScreen(image, player)
+      gateway.blitme()
+      self.blitPizza(wisp)
+      x = player.rect.centerx
+      y = player.rect.centery
+      if self.collide(player, wisp) == True:
+        self.spawnRoom(chosen, x, y)
+        return None
+      if self.collide(player, gateway) == True:
+        self.firstHallway()
+        return None
+
+  def firstHallway(self):
+    self.state = "first hallway"
+    player = char.Char(self.screen, pick, 640, 400)
+    while True:
+      self.check_events(player)
+      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/hallway.png")), (self.height, self.width))
+      self.screen.blit(image, (0, 0))
+      player.update()
+      self.updateScreen(image, player)
 
   def check_events(self, player):
     for event in pygame.event.get():
@@ -125,13 +145,15 @@ class Controller:
           player.moving_down = False
 
 
-  def updateScreen(self, image, object, door):
+  def updateScreen(self, image, object):
     self.screen.blit(image, (0,0))
     object.blitme()
-    door.blitme()
     pygame.display.flip()
 
   def blitPizza(self, wisp):
     wisp.blitme()
     pygame.display.flip()
 
+  def collide(self, player, object):
+    if player.rect.colliderect(object):
+        return True;
