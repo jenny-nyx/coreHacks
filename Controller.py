@@ -17,7 +17,6 @@ class Controller:
     self.char_buttons.add(self.girl_button)
     self.char_buttons.add(self.boy_button)
 
-
   def mainLoop(self):
     while True:
       if (self.state == "start"):
@@ -76,7 +75,6 @@ class Controller:
       self.screen.blit(coreLounge, (700, 300))
       player.update()
       self.updateScreen(image, player)
-
 
   def chooseChar(self):
     while True:
