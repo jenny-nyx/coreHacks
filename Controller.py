@@ -236,6 +236,7 @@ class Controller:
         health -= 51
         self.spawnRoom(pick, 640, 400)
         return None
+
       elif flag == True:
         whatever = baseFont.render("how dare you disturb me", True, (0, 0, 0))
         prompt = baseFont.render("what is the correct answer?", True, (0, 0, 0))
@@ -361,19 +362,22 @@ class Controller:
       image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/jordanRoom.png")), (self.height, self.width))
       self.screen.blit(image, (0, 0))
       self.updateScreen(image, player)
-      question = baseFont.render("Given 50 bikes, each with a tank that can go 100 km: how many kms can you go? (press q to restart, press enter to submit, no numPad): ", True, (0, 0, 0))
-      questionRect = question.get_rect();
-      questionRect.centerx = 620
-      questionRect.top = 300
-      self.screen.blit(question, questionRect)
       pygame.display.flip()
       if self.collide(player, backDoor) == True:
         self.secondHallway()
         return None
       if self.collide(player, jordan) == True:
           flagBoi = True
-          
+
       if (flagBoi):
+
+        question = baseFont.render("Given 50 bikes, each with a tank that can go 100 km: how many kms can you go? (press q to restart, press enter to submit, no numPad): ", True, (0, 0, 0))
+        questionRect = question.get_rect();
+        questionRect.centerx = 620
+        questionRect.top = 300
+        self.screen.blit(question, questionRect)
+        pygame.display.flip()
+
         for event in pygame.event.get():
           if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
@@ -428,11 +432,6 @@ class Controller:
       image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/samRoom.png")), (self.height, self.width))
       self.screen.blit(image, (0, 0))
       self.updateScreen(image, player)
-      question = baseFont.render("what is sam's player level in tetris?: (q to reset, enter to submit) ", True, (0, 0, 0))
-      questionRect = question.get_rect();
-      questionRect.centerx = 620
-      questionRect.top = 300
-      self.screen.blit(question, questionRect)
       pygame.display.flip()
       if self.collide(player, backDoor) == True:
         self.secondHallway()
@@ -441,6 +440,12 @@ class Controller:
           flagBoi = True
 
       if (flagBoi):
+        question = baseFont.render("what is sam's player level in tetris?: (q to reset, enter to submit) ", True, (0, 0, 0))
+        questionRect = question.get_rect();
+        questionRect.centerx = 620
+        questionRect.top = 300
+        self.screen.blit(question, questionRect)
+        pygame.display.flip()
         for event in pygame.event.get():
           if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
