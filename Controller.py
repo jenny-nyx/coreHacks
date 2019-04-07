@@ -62,17 +62,22 @@ class Controller:
 
   def gameWon(self):
     #self.state == gamewon
+    pygame.display.set_caption("You won!")
     while True:
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
+          print(":c we didnt think you'd get this far")
           sys.exit()
 
   def gameOver(self):
     #self.state == gameover
+    pygame.display.set_caption("better luck next time dork")
     while True:
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
+          print("Gameover nerd")
           sys.exit()
+
 
   def startingMenu(self):
     while True:
@@ -338,6 +343,7 @@ class Controller:
 
   def jordansRoom(self):
     global health
+    global key3
     flagBoi = False
     player = char.Char(self.screen, pick, 100, 700)
     jordan = char.Char(self.screen, 'jordan', 450, 500)
@@ -373,29 +379,29 @@ class Controller:
           if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
               answer=""
-            if event.key == pygame.K_1 or event.key == pygame.K_P1:
+            if event.key == pygame.K_1 or event.key == pygame.K_KP1:
               answer+="1"
-            if event.key == pygame.K_2 or event.key == pygame.K_P2:
+            if event.key == pygame.K_2 or event.key == pygame.K_KP2:
               answer+="2"
-            if event.key == pygame.K_3 or event.key == pygame.K_P3:
+            if event.key == pygame.K_3 or event.key == pygame.K_KP3:
               answer+="3"
-            if event.key == pygame.K_4 or event.key == pygame.K_P4:
+            if event.key == pygame.K_4 or event.key == pygame.K_KP4:
               answer+="4"
-            if event.key == pygame.K_5 or event.key == pygame.K_P5:
+            if event.key == pygame.K_5 or event.key == pygame.K_KP5:
               answer+="5"
-            if event.key == pygame.K_6 or event.key == pygame.K_P6:
+            if event.key == pygame.K_6 or event.key == pygame.K_KP6:
               answer+="6";
-            if event.key == pygame.K_7 or event.key == pygame.K_P7:
+            if event.key == pygame.K_7 or event.key == pygame.K_KP7:
               answer+="7"
-            if event.key == pygame.K_8 or event.key == pygame.K_P8:
+            if event.key == pygame.K_8 or event.key == pygame.K_KP8:
               answer+="8"
-            if event.key == pygame.K_9 or event.key == pygame.K_P9:
+            if event.key == pygame.K_9 or event.key == pygame.K_KP9:
               answer+="9"
-            if event.key == pygame.K_0 or event.key == pygame.K_P0:
+            if event.key == pygame.K_0 or event.key == pygame.K_KP0:
               answer+="0"
             if event.key == pygame.K_RETURN:
               if answer == check:
-                key3 = True;
+                key3 = True
                 self.secondHallway()
                 return None
               elif answer != check:
@@ -404,13 +410,15 @@ class Controller:
                 return None
 
   def samsRoom(self):
-    player = char.Char(self.screen, pick, 640, 600)
-    sam = char.Char(self.screen, pick, 500, 500)
+    player = char.Char(self.screen, pick, 100, 700)
+    sam = char.Char(self.screen, 'sam', 640, 200)
     backDoor = door.Door(self.screen, 0, 800)
     while True:
       self.state = "sam"
       backDoor.blitme()
       sam.blitme()
+      pygame.display.flip()
+      self.check_events(player)
       player.update()
       image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/samRoom.png")), (self.height, self.width))
       self.screen.blit(image, (0, 0))
