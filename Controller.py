@@ -2,6 +2,7 @@ import time, pygame, os, buttons, char, sys, random, pizza, door
 
 class Controller:
   def __init__(self, height = 1280, width=800):
+    pygame.display.set_caption("The Best Core Project, No Contest")
     self.state = "start"
     self.height = height
     self.width = width
@@ -27,6 +28,8 @@ class Controller:
         self.spawnRoom()
       if (self.state == "first hallway"):
         self.firstHallway()
+      if (self.state == 'fresh'):
+        self.freshmanRoom()
       if (self.state == "gameover"):
         self.gameOver()
       if (self.state == "gamewon"):
@@ -112,15 +115,15 @@ class Controller:
         return None
 
   def firstHallway(self):
-    self.state = "first hallway"
-    player = char.Char(self.screen, pick, 640, 400)
-    backDoor = door.Door(self.screen, 1280, 400)
-    freshmanDoor = door.Door(self.screen, 0, 400)
-    partyDoor = door.Door(self.screen, 1280, 400)
+    player = char.Char(self.screen, pick, 640, 575)
+    backDoor = door.Door(self.screen, 640, 800)
+    freshmanDoor = door.Door(self.screen, 400, 320)
+    partyDoor = door.Door(self.screen, 850, 320)
     nextDoor = door.Door(self.screen, 640, 0)
 
     while True:
       self.check_events(player)
+      self.state = "first hallway"
       image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/hallway.png")), (self.height, self.width))
       self.screen.blit(image, (0, 0))
       player.update()
@@ -128,9 +131,39 @@ class Controller:
       backDoor.blitme()
       freshmanDoor.blitme()
       partyDoor.blitme()
-      nextdoor.blitme()
-
+      nextDoor.blitme()
+      pygame.display.flip()
+      if self.collide(player, backDoor) == True:
+        self.spawnRoom(pick, 640, 400)
+        return None
       if self.collide(player, freshmanDoor) == True:
+        self.freshmanRoom()
+        return None
+
+  def freshmanRoom(self):
+    player = char.Char(self.screen, pick, 300, 550)
+    adam = char.Char(self.screen, 'adam', 1280, 450)
+    storage_adam = char.Char(self.screen, 'adam', 20, 430)
+    sleeping_adam1 = char.Char(self.screen, 'adam', 500, 100)
+    working_adam = char.Char(self.screen, 'adam', 1190, 450)
+    backDoor = door.Door(self.screen, 640, 800)
+
+    while True:
+      self.check_events(player)
+      self.state = "fresh"
+      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/adamsRoom.png")), (self.height, self.width))
+      self.screen.blit(image, (0, 0))
+      player.update()
+      self.updateScreen(image, player)
+      backDoor.blitme()
+      adam.blitme()
+      storage_adam.blitme()
+      sleeping_adam1.blitme()
+      working_adam.blitme()
+      pygame.display.flip()
+      if self.collide(player, backDoor) == True:
+        self.firstHallway()
+        return None
 
 
 
