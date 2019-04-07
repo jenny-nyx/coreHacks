@@ -4,6 +4,8 @@ from pygame.locals import *
 class Controller:
   def __init__(self, height = 1280, width=800):
     pygame.display.set_caption("The Best Core Project, No Contest")
+    global question
+    question = False
     global flag
     flag = False
     global key1
@@ -14,6 +16,8 @@ class Controller:
     health = 100
     global counter
     counter = 0
+    global locked
+    locked = True
     self.state = "start"
     self.height = height
     self.width = width
@@ -105,6 +109,7 @@ class Controller:
             return None
 
   def spawnRoom(self, chosen, x, y):
+    global locked
     self.chosen = chosen
     player = char.Char(self.screen, self.chosen, x, y)
     wisp = pizza.Pizza(self.screen)
@@ -138,6 +143,7 @@ class Controller:
     adamDoor = door.Door(self.screen, 400, 320)
     partyDoor = door.Door(self.screen, 850, 320)
     nextDoor = door.Door(self.screen, 640, 0)
+    baseFont = pygame.font.SysFont(None, 30)
 
     while True:
       self.check_events(player)
@@ -160,6 +166,17 @@ class Controller:
       if self.collide(player, partyDoor) == True:
         self.henryRoom()
         return None
+      if self.collide(player, nextDoor) == True:
+        if key1 == True and key2 == True:
+          self.secondHallway()
+          return None
+        elif locked == True:
+          lock_txt = baseFont.render("CANT PASS: HALLWAY SQUAD IN THE WAY", True, (0,0,0))
+          lock_txt_rect = lock_txt.get_rect()
+          lock_txt_rect.top = 100
+          lock_txt_rect.right = 850
+          self.screen.blit(lock_txt, lock_txt_rect)
+          pygame.display.flip()
 
   def adamRoom(self):
     global flag
@@ -171,11 +188,11 @@ class Controller:
     working_adam = char.Char(self.screen, 'adam', 1165, 450)
     backDoor = door.Door(self.screen, 640, 800)
     baseFont = pygame.font.SysFont(None, 30)
-##    Ffont = pygame.font.SysFont("Comic Sans MS", 30)
     question = eztext.Input(maxlength = 40, color=(0, 0, 0), prompt="what is your guess?: ")
 
 
     while True:
+      global health
       self.check_events(player)
       self.state = "adam"
       image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/adamsRoom.png")), (self.height, self.width))
@@ -192,17 +209,20 @@ class Controller:
         self.firstHallway()
         return None
       elif self.collide(player, storage_adam) == True:
+        health -= 51
         self.spawnRoom(pick, 640, 400)
         return None
       elif self.collide(player, sleeping_adam1) == True:
         if flag == False:
+            health -= 51
             self.spawnRoom(pick, 640, 400)
             return None
         elif flag == True:
-            self.firstHallway()
             key1 = True
+            self.firstHallway()
             return None
       elif self.collide(player, working_adam) == True:
+        health -= 51
         self.spawnRoom(pick, 640, 400)
         return None
       elif flag == True:
@@ -215,6 +235,12 @@ class Controller:
         promptRect.top = 600
         whateverRect.right = 700
         promptRect.right = 700
+        pumpernickel = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/pumpernickel.png")), (160, 150))
+        self.screen.blit(pumpernickel, (410, 20))
+        go = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/go.png")), (160, 150))
+        self.screen.blit(go, (1065, 380))
+        periwinkle = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/periwinkle.png")), (160, 150))
+        self.screen.blit(periwinkle, (0, 360))
 
         self.screen.blit(whatever, whateverRect)
         self.screen.blit(prompt, promptRect)
@@ -224,11 +250,17 @@ class Controller:
         flag = True
 
   def henryRoom(self):
+    global pick
+    global health
     player = char.Char(self.screen, pick, 300, 700)
     henry = char.Char(self.screen, 'henry', 470, 400)
     backDoor = door.Door(self.screen, 0, 800)
+    baseFont = pygame.font.SysFont(None, 30)
 
     while True:
+      global question
+      global counter
+      global key2
       self.check_events(player)
       self.state = "henry"
       image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/henryRoom.png")), (self.height, self.width))
@@ -241,13 +273,55 @@ class Controller:
       if self.collide(player, backDoor) == True:
         self.firstHallway()
         return None
+      linear = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/question.png")), (790, 100))
+      self.screen.blit(linear, (500, 300))
+      hint = baseFont.render("Give me the amount of pizzas equal to sisters", True, (0, 0, 0))
+      hintRect = hint.get_rect()
+      hintRect.top = 370
+      hintRect.right = 1100
+      self.screen.blit(hint, hintRect)
+      pygame.display.flip()
+      if self.collide(player, henry) == True:
+        if question == True:
+          if counter == 3:
+            key2 = True
+            self.firstHallway()
+            return None
+          else:
+            health -= 49
+            counter = 0
+            self.spawnRoom(pick, 640, 400)
+            return None
+        else:
+          question = True
 
-
-
+  def secondHallway(self):
+    global pick
+    global health
+    player = char.Char(self.screen, pick, 640, 575)
+    backDoor = door.Door(self.screen, 640, 800)
+    samsDoor = door.Door(self.screen, 640, 200)
+    while True:
+      backDoor.blitme()
+      samsDoor.blitme()
+      pygame.display.flip()
+      self.check_events(player)
+      player.update()
+      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/secondHallway.png")), (self.height, self.width))
+      self.screen.blit(image, (0,0))
+      if self.collide(player, backDoor) == True:
+        self.firstHallway()
+        return None
+      self.updateScreen(image, player)
 
   def check_events(self, player):
     for event in pygame.event.get():
       global health
+      global key1
+      global key2
+      global locked
+      if key1 == True and key2 == True:
+        locked = False
       if event.type == pygame.QUIT:
         sys.exit()
       elif health <= 0:
@@ -270,6 +344,7 @@ class Controller:
           player.moving_up = False
         elif event.key == pygame.K_DOWN:
           player.moving_down = False
+
 
 
   def updateScreen(self, image, object):
