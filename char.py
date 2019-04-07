@@ -19,6 +19,8 @@ class Char():
 
     self.moving_right = False
     self.moving_left = False
+    self.moving_up = False
+    self.moving_down = False
 
   def blitme(self):
     self.screen.blit(self.image, self.rect)
@@ -28,3 +30,7 @@ class Char():
       self.rect.centerx += 25
     if self.moving_left:
       self.rect.centerx -= 25
+    if self.moving_up:
+      self.rect.centery -= 25
+    if self.moving_down:
+      self.rect.centery += 25
