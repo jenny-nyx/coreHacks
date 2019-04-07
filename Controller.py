@@ -2,10 +2,10 @@ import time, pygame, os, buttons, char, sys
 
 class Controller:
   def __init__(self, height = 1280, width=800):
-    self.state = "start";
-    self.height = height;
-    self.width = width;
-    self.screen = pygame.display.set_mode((self.height, self.width));
+    self.state = "start"
+    self.height = height
+    self.width = width
+    self.screen = pygame.display.set_mode((self.height, self.width))
     self.char_buttons = pygame.sprite.Group()
     self.start_buttons = pygame.sprite.Group()
     self.startButton = buttons.Button('startButton', (220, 450), "images/startButton.png")
@@ -25,7 +25,7 @@ class Controller:
       if (self.state == "choose"):
         self.chooseChar()
       if (self.state == "spawn"):
-        self.spawnRoom();
+        self.spawnRoom()
       if (self.state == "gameover"):
         self.gameOver()
       if (self.state == "gamewon"):
@@ -36,14 +36,14 @@ class Controller:
     while True:
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
-          sys.exit();
+          sys.exit()
 
   def gameOver(self):
     #self.state == gameover
     while True:
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
-          sys.exit();
+          sys.exit()
 
   def startingMenu(self):
     while True:
@@ -122,7 +122,6 @@ class Controller:
           player.moving_up = False
         elif event.key == pygame.K_DOWN:
           player.moving_down = False
-
 
   def updateScreen(self, image, object):
     self.screen.blit(image, (0,0))
