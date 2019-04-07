@@ -74,10 +74,9 @@ class Controller:
       self.screen.blit(coreLounge, (700, 300))
       player = char.Char(self.screen, self.chosen)
       player.blitme()
+      self.check_events(player)
       pygame.display.flip()
-      for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-          sys.exit()
+        
 
   def chooseChar(self):
     while True:
@@ -101,7 +100,14 @@ class Controller:
             self.spawnRoom(chosen)
             return None
 
-
-
+  def check_events(self, player):
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        sys.exit()
+      elif event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_RIGHT:
+          player.rect.centerx += 1
+        elif event.key == pygame.K_LEFT:
+          player.rect.centerx -= 1
 
   #def spawnPizza(self):
