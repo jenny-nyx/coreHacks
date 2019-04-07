@@ -114,12 +114,26 @@ class Controller:
   def firstHallway(self):
     self.state = "first hallway"
     player = char.Char(self.screen, pick, 640, 400)
+    backDoor = door.Door(self.screen, 1280, 400)
+    freshmanDoor = door.Door(self.screen, 0, 400)
+    partyDoor = door.Door(self.screen, 1280, 400)
+    nextDoor = door.Door(self.screen, 640, 0)
+
     while True:
       self.check_events(player)
       image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/hallway.png")), (self.height, self.width))
       self.screen.blit(image, (0, 0))
       player.update()
       self.updateScreen(image, player)
+      backDoor.blitme()
+      freshmanDoor.blitme()
+      partyDoor.blitme()
+      nextdoor.blitme()
+
+      if self.collide(player, freshmanDoor) == True:
+
+
+
 
   def check_events(self, player):
     for event in pygame.event.get():
