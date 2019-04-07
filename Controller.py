@@ -67,7 +67,7 @@ class Controller:
     self.chosen = chosen
     player = char.Char(self.screen, self.chosen)
     wisp = pizza.Pizza(self.screen)
-    gateway = door.Door(self.screen)
+    gateway = door.Door(self.screen, 0, 0)
     while True:
       self.check_events(player)
       self.state = "spawn"
