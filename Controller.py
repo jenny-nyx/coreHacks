@@ -18,6 +18,8 @@ class Controller:
     counter = 0
     global locked
     locked = True
+    global key3
+    key3 = False
     self.state = "start"
     self.height = height
     self.width = width
@@ -47,6 +49,12 @@ class Controller:
         self.adamRoom()
       if (self.state == "henry"):
         self.henryRoom()
+      if (self.state == "second hallway"):
+        self.secondHallway();
+      if (self.state == "jordan"):
+        self.jordansRoom()
+      if (self.state == "sam"):
+        self.samsRoom()
       if (self.state == "gameover"):
         self.gameOver()
       if (self.state == "gamewon"):
@@ -190,7 +198,6 @@ class Controller:
     baseFont = pygame.font.SysFont(None, 30)
     question = eztext.Input(maxlength = 40, color=(0, 0, 0), prompt="what is your guess?: ")
 
-
     while True:
       global health
       self.check_events(player)
@@ -298,20 +305,115 @@ class Controller:
   def secondHallway(self):
     global pick
     global health
+    global key3
     player = char.Char(self.screen, pick, 640, 575)
     backDoor = door.Door(self.screen, 640, 800)
     samsDoor = door.Door(self.screen, 640, 200)
+    jordansDoor = door.Door(self.screen, 800, 500)
     while True:
+      self.state == "second hallway"
       backDoor.blitme()
       samsDoor.blitme()
+      jordansDoor.blitme()
       pygame.display.flip()
       self.check_events(player)
       player.update()
-      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/secondHallway.png")), (self.height, self.width))
+      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/secondhallway.png")), (self.height, self.width))
       self.screen.blit(image, (0,0))
       if self.collide(player, backDoor) == True:
         self.firstHallway()
         return None
+      elif self.collide(player, samsDoor) == True:
+        if key3 == False:
+          pass
+        elif key3 == True:
+          self.samsRoom();
+          return None
+
+      elif self.collide(player, jordansDoor) == True:
+        self.jordansRoom();
+        return None
+
+      self.updateScreen(image, player)
+
+  def jordansRoom(self):
+    global health
+    flagBoi = False
+    player = char.Char(self.screen, pick, 100, 700)
+    jordan = char.Char(self.screen, 'jordan', 450, 500)
+    backDoor = door.Door(self.screen, 0, 800)
+    baseFont = pygame.font.SysFont(None, 30)
+    answer = ""
+    check = "350"
+
+    while True:
+      self.state == "jordan"
+      backDoor.blitme()
+      jordan.blitme()
+      pygame.display.flip()
+      self.check_events(player)
+      player.update()
+      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/jordanRoom.png")), (self.height, self.width))
+      self.screen.blit(image, (0, 0))
+      self.updateScreen(image, player)
+      question = baseFont.render("Given 50 bikes, each with a tank that can go 100 km: how many kms can you go? (press q to restart, press enter to submit): ", True, (0, 0, 0))
+      questionRect = question.get_rect();
+      questionRect.centerx = 620
+      questionRect.top = 300
+      self.screen.blit(question, questionRect)
+      pygame.display.flip()
+      if self.collide(player, backDoor) == True:
+        self.secondHallway()
+        return None
+      if self.collide(player, jordan) == True:
+          flagBoi = True
+
+      if (flagBoi):
+        for event in pygame.event.get():
+          if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_q:
+              answer=""
+            if event.key == pygame.K_1 or event.key == pygame.K_P1:
+              answer+="1"
+            if event.key == pygame.K_2 or event.key == pygame.K_P2:
+              answer+="2"
+            if event.key == pygame.K_3 or event.key == pygame.K_P3:
+              answer+="3"
+            if event.key == pygame.K_4 or event.key == pygame.K_P4:
+              answer+="4"
+            if event.key == pygame.K_5 or event.key == pygame.K_P5:
+              answer+="5"
+            if event.key == pygame.K_6 or event.key == pygame.K_P6:
+              answer+="6";
+            if event.key == pygame.K_7 or event.key == pygame.K_P7:
+              answer+="7"
+            if event.key == pygame.K_8 or event.key == pygame.K_P8:
+              answer+="8"
+            if event.key == pygame.K_9 or event.key == pygame.K_P9:
+              answer+="9"
+            if event.key == pygame.K_0 or event.key == pygame.K_P0:
+              answer+="0"
+            if event.key == pygame.K_RETURN:
+              if answer == check:
+                key3 = True;
+                self.secondHallway()
+                return None
+              elif answer != check:
+                health -= 69
+                self.spawnRoom(pick, 640, 400)
+                return None
+
+  def samsRoom(self):
+    player = char.Char(self.screen, pick, 640, 600)
+    sam = char.Char(self.screen, pick, 500, 500)
+    backDoor = door.Door(self.screen, 0, 800)
+    while True:
+      self.state = "sam"
+      backDoor.blitme()
+      sam.blitme()
+      player.update()
+      image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/samRoom.png")), (self.height, self.width))
+      self.screen.blit(image, (0, 0))
       self.updateScreen(image, player)
 
   def check_events(self, player):
@@ -344,8 +446,6 @@ class Controller:
           player.moving_up = False
         elif event.key == pygame.K_DOWN:
           player.moving_down = False
-
-
 
   def updateScreen(self, image, object):
     self.screen.blit(image, (0,0))
