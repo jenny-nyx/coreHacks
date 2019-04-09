@@ -5,13 +5,11 @@ class Controller:
     def __init__(self, height = 1280, width=800):
         pygame.display.set_caption("The Best Core Project, No Contest")
         self.pick = ''
-        self.question = False
         self.flag = False
         self.key1 = False
         self.key2 = False
         self.health = 100
         self.counter = 0
-        self.locked = True
         self.key3 = False
         self.state = "start"
         self.height = height
@@ -81,10 +79,10 @@ class Controller:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                if self.startButton.rect.collidepoint(mouseLocation):
-                    self.chooseChar()
-                    return None
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    if self.startButton.rect.collidepoint(mouseLocation):
+                        self.chooseChar()
+                        return None
                 elif self.quitButton.rect.collidepoint(mouseLocation):
                     pygame.quit
                     sys.exit()
@@ -170,7 +168,7 @@ class Controller:
                 if self.key1 == True and self.key2 == True:
                     self.secondHallway()
                     return None
-                elif self.locked == True:
+                elif self.key1 == False or self.key2 == False:
                     lock_txt = baseFont.render("CANT PASS: HALLWAY SQUAD IN THE WAY", True, (0,0,0))
                     lock_txt_rect = lock_txt.get_rect()
                     lock_txt_rect.top = 100
@@ -274,19 +272,16 @@ class Controller:
             self.screen.blit(hint, hintRect)
             pygame.display.flip()
             if self.collide(player, henry) == True:
-                if self.question == True:
-                    if self.counter == 3:
-                        self.health = 100
-                        self.key2 = True
-                        self.firstHallway()
-                        return None
-                    else:
-                        self.health -= 49
-                        self.counter = 0
-                        self.spawnRoom(self.pick, 640, 400)
-                        return None
+                if self.counter == 3:
+                    self.health = 100
+                    self.key2 = True
+                    self.firstHallway()
+                    return None
                 else:
-                    self.question = True
+                    self.health -= 49
+                    self.counter = 0
+                    self.spawnRoom(self.pick, 640, 400)
+                    return None
 
     def secondHallway(self):
         player = char.Char(self.screen, self.pick, 640, 575)
@@ -355,7 +350,7 @@ class Controller:
                 pygame.display.flip()
 
             for event in pygame.event.get():
-                if even.type == pygame.QUIT:
+                if event.type == pygame.QUIT:
                   sys.exit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
@@ -386,7 +381,7 @@ class Controller:
                             self.key3 = True
                             self.secondHallway()
                             return None
-                        elif answer != check:
+                        else:
                             self.health -= 69
                             self.spawnRoom(self.pick, 640, 400)
                             return None
@@ -463,9 +458,7 @@ class Controller:
 
     def check_events(self, player):
         for event in pygame.event.get():
-            if self.key1 == True and self.key2 == True:
-                self.locked = False
-            elif event.type == pygame.QUIT:
+            if event.type == pygame.QUIT:
                 sys.exit()
             elif self.health <= 0:
                 self.gameOver()
