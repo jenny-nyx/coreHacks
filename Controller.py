@@ -4,13 +4,13 @@ from pygame.locals import *
 # Objects
 from objects import buttons, char, pizza, door
 # Game states
-from game_states import start_menu, loss_screen, win_screen, char_select, \
+from game_states import loss_screen, win_screen, start_menu, char_select, \
 spawn, first_hallway, adams_room, henrys_room, second_hallway, jordans_room, \
 sams_room
 
 
-class Controller(event_handler.Mixin, start_menu.Mixin, loss_screen.Mixin,
-                 win_screen.Mixin, char_select.Mixin, spawn.Mixin,
+class Controller(event_handler.Mixin, loss_screen.Mixin, win_screen.Mixin,
+                 start_menu.Mixin, char_select.Mixin, spawn.Mixin,
                  first_hallway.Mixin, adams_room.Mixin, henrys_room.Mixin,
                  second_hallway.Mixin, jordans_room.Mixin, sams_room.Mixin):
 
