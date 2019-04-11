@@ -36,7 +36,7 @@ class Mixin:
             elif flagBoi == True:
                 # Set question
                 question_p1 = self.baseFont.render("What is sam's player level in tetris?", True, (0, 0, 0))
-                question_p2 = self.baseFont.render("(press q to restart, press enter to submit)", True, (0, 0, 0))
+                question_p2 = self.baseFont.render("(press ` to restart, press enter to submit, press backspace/delete/return to go back one character)", True, (0, 0, 0))
                 # Obtain rects
                 p1Rect = question_p1.get_rect()
                 p1Rect.centerx = 620

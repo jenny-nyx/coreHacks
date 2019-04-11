@@ -36,7 +36,7 @@ class Mixin:
             elif flagBoi == True:
                 # Set question
                 question_p1 = self.baseFont.render("Given 50 bikes, each with a tank that can go 100 km: how many kms can you go?", True, (0, 0, 0))
-                question_p2 = self.baseFont.render("(press q to restart, press enter to submit)", True, (0, 0, 0))
+                question_p2 = self.baseFont.render("(press ` to restart, press enter to submit, press backspace/delete/return to go back one character)", True, (0, 0, 0))
                 # Obtain rect
                 p1Rect = question_p1.get_rect()
                 p1Rect.centerx = 620
