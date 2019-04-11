@@ -4,10 +4,9 @@ import event_handler, updateScreen, collision
 from pygame.locals import *
 # Objects
 from objects import buttons, char, pizza, door
-# Game states
-from game_states import start_menu, loss_screen, win_screen, char_select, \
-spawn, first_hallway, adams_room, henrys_room, second_hallway, jordans_room, \
-sams_room
+# Main class
+import Controller
+
 
 class Mixin:
     # Second hallway state

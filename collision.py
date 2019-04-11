@@ -1,7 +1,10 @@
+# Misc
 import pygame, pygame.freetype, os, sys
-from objects import buttons, char, pizza, door
-from game_states import start_menu, loss_screen, win_screen, char_select, spawn, first_hallway, adams_room, henrys_room
 from pygame.locals import *
+# Objects
+from objects import buttons, char, pizza, door
+# Main class
+import Controller
 
 class Mixin:
     # Checks for collisions
