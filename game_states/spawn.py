@@ -1,6 +1,5 @@
 # Misc
-import pygame, pygame.freetype, os, sys
-import event_handler, updateScreen, collision
+import pygame, pygame.freetype, os, sys, event_handler
 from pygame.locals import *
 # Objects
 from objects import buttons, char, pizza, door

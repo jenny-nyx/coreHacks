@@ -1,6 +1,5 @@
 # Misc
-import pygame, pygame.freetype, os, sys
-import event_handler, updateScreen, collision
+import pygame, pygame.freetype, os, sys, event_handler
 from pygame.locals import *
 # Objects
 from objects import buttons, char, pizza, door
@@ -10,11 +9,10 @@ spawn, first_hallway, adams_room, henrys_room, second_hallway, jordans_room, \
 sams_room
 
 
-class Controller(event_handler.Mixin, updateScreen.Mixin, collision.Mixin,
-                 start_menu.Mixin, loss_screen.Mixin, win_screen.Mixin,
-                 char_select.Mixin, spawn.Mixin, first_hallway.Mixin,
-                 adams_room.Mixin, henrys_room.Mixin, second_hallway.Mixin,
-                 jordans_room.Mixin, sams_room.Mixin):
+class Controller(event_handler.Mixin, start_menu.Mixin, loss_screen.Mixin,
+                 win_screen.Mixin, char_select.Mixin, spawn.Mixin,
+                 first_hallway.Mixin, adams_room.Mixin, henrys_room.Mixin,
+                 second_hallway.Mixin, jordans_room.Mixin, sams_room.Mixin):
 
     def __init__(self, height=1280, width=800):
         # Initialize caption
@@ -53,13 +51,15 @@ class Controller(event_handler.Mixin, updateScreen.Mixin, collision.Mixin,
 
     # Handles blitting and flipping
     def updateScreen(self, image, player, npcs, doors):
-        self.screen.blit(image, (0,0))
+        self.screen.blit(image, (0, 0))
         player.blitme()
         for npc in npcs:
-          npc.blitme()
+            npc.blitme()
         for door in doors:
-          door.blitme()
-        pygame.display.set_caption("The Best Core Project, No Contest. HP: {}% Pizza Count: {}".format(self.health, self.counter))
+            door.blitme()
+        pygame.display.set_caption("The Best Core Project, No Contest. HP: " +
+                                   "{}% Pizza Count: {}".format(self.health,
+                                                                self.counter))
         pygame.display.flip()
 
     # Checks for collisions
