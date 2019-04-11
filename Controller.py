@@ -15,7 +15,7 @@ class Controller:
         self.key3 = False
         self.answer = ''
         self.check = ''
-        self.state = 'start'
+        self.state = ''
         # Display settings
         self.height = height
         self.width = width
@@ -34,31 +34,6 @@ class Controller:
         self.char_buttons.add(self.girl_button)
         self.char_buttons.add(self.boy_button)
 
-    # Track room states
-    def mainLoop(self):
-        while True:
-            if (self.state == "start"):
-                self.startingMenu()
-            elif (self.state == "choose"):
-                self.chooseChar()
-            elif (self.state == "spawn"):
-                self.spawnRoom()
-            elif (self.state == "first hallway"):
-                self.firstHallway()
-            elif (self.state == 'adam'):
-                self.adamRoom()
-            elif (self.state == "henry"):
-                self.henryRoom()
-            elif (self.state == "second hallway"):
-                self.secondHallway()
-            elif (self.state == "jordan"):
-                self.jordansRoom()
-            elif (self.state == "sam"):
-                self.samsRoom()
-            elif (self.state == "gameover"):
-                self.gameOver()
-            elif (self.state == "gamewon"):
-                self.gameWon()
     # Won game state
     def gameWon(self):
         # Set caption
@@ -85,7 +60,7 @@ class Controller:
     def startingMenu(self):
         # Create game state
         while True:
-            self.state == "start"
+            self.state = "start"
             # Create interface
             image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/startUpMenu.png")), (self.height, self.width))
             self.screen.blit(image, (0, 0))
@@ -179,7 +154,7 @@ class Controller:
             self.updateScreen(image, player, npcs, doors)
             # Room logic
             if self.collide(player, backDoor) == True:
-                self.spawnRoom(self.pick, 640, 400)
+                self.spawnRoom(640, 400)
                 return None
             elif self.collide(player, adamDoor) == True:
                 self.adamRoom()
@@ -225,12 +200,12 @@ class Controller:
                 return None
             elif self.collide(player, storage_adam) == True:
                 self.health -= 51
-                self.spawnRoom(self.pick, 640, 400)
+                self.spawnRoom(640, 400)
                 return None
             elif self.collide(player, sleeping_adam1) == True:
                 if flag == False:
                     self.health -= 51
-                    self.spawnRoom(self.pick, 640, 400)
+                    self.spawnRoom(640, 400)
                     return None
                 elif flag == True:
                     self.health = 100
@@ -239,7 +214,7 @@ class Controller:
                     return None
             elif self.collide(player, working_adam) == True:
                 self.health -= 51
-                self.spawnRoom(self.pick, 640, 400)
+                self.spawnRoom(640, 400)
                 return None
             # Problem to solve
             elif flag == True:
@@ -268,7 +243,7 @@ class Controller:
             # Raise flag
             elif self.collide(player, adam) == True:
                 flag = True
-    # Henry's State
+    # Henry's state
     def henryRoom(self):
         # Create objects in room
         player = char.Char(self.screen, self.pick, 300, 700)
@@ -297,7 +272,7 @@ class Controller:
                 else:
                     self.health -= 49
                     self.counter = 0
-                    self.spawnRoom(self.pick, 640, 400)
+                    self.spawnRoom(640, 400)
                     return None
             # Problem to solve
             linear = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/question.png")), (790, 100))
@@ -311,22 +286,24 @@ class Controller:
             self.screen.blit(linear, (500, 300))
             self.screen.blit(hint, hintRect)
             pygame.display.flip()
-
+    # Second hallway state
     def secondHallway(self):
+        # Create objects in room
         player = char.Char(self.screen, self.pick, 640, 575)
         backDoor = door.Door(self.screen, 640, 800)
-        samsDoor = door.Door(self.screen, 640, 200)
         jordansDoor = door.Door(self.screen, 800, 500)
+        samsDoor = door.Door(self.screen, 640, 200)
+        npcs = []
+        doors = [backDoor, jordansDoor, samsDoor]
+        # Create game state
         while True:
-            self.state == "second hallway"
-            backDoor.blitme()
-            samsDoor.blitme()
-            jordansDoor.blitme()
-            pygame.display.flip()
+            self.state = "second hallway"
+            # Blit objects in room
             self.check_events(player)
-            player.update()
             image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/secondhallway.png")), (self.height, self.width))
-            self.screen.blit(image, (0,0))
+            player.update()
+            self.updateScreen(image, player, npcs, doors)
+            # Room logic
             if self.collide(player, backDoor) == True:
                 self.firstHallway()
                 return None
@@ -336,78 +313,96 @@ class Controller:
                 elif self.key3 == True:
                     self.samsRoom()
                     return None
-
             elif self.collide(player, jordansDoor) == True:
                 self.jordansRoom()
                 return None
-
-            self.updateScreen(image, player)
-
+    # Jordan's State
     def jordansRoom(self):
+        # Set flags
+        flagBoi = False
         self.answer = ''
         self.check = '350'
-        flagBoi = False
+        # Create objects in room
         player = char.Char(self.screen, self.pick, 100, 700)
         jordan = char.Char(self.screen, 'jordan', 450, 500)
         backDoor = door.Door(self.screen, 0, 800)
-
+        npcs = [jordan]
+        doors = [backDoor]
+        # Create game state
         while True:
-            self.state == "jordan"
-            image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/jordanRoom.png")), (self.height, self.width))
+            self.state = "jordan"
+            # Blit objects in room
             self.check_events(player)
+            image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/jordanRoom.png")), (self.height, self.width))
             player.update()
-            self.updateScreen(image, player)
-            backDoor.blitme()
-            jordan.blitme()
-            pygame.display.flip()
+            self.updateScreen(image, player, npcs, doors)
+            # Room logic
             if self.collide(player, backDoor) == True:
                 self.secondHallway()
                 return None
+            # Problem to solve
+            elif flagBoi == True:
+                # Set question
+                question_p1 = self.baseFont.render("Given 50 bikes, each with a tank that can go 100 km: how many kms can you go?", True, (0, 0, 0))
+                question_p2 = self.baseFont.render("(press q to restart, press enter to submit)", True, (0, 0, 0))
+                # Obtain rect
+                p1Rect = question_p1.get_rect()
+                p1Rect.centerx = 620
+                p1Rect.bottom = 300
+                p2Rect = question_p2.get_rect()
+                p2Rect.centerx = 620
+                p2Rect.top = 300
+                # Blit question
+                self.screen.blit(question_p1, p1Rect)
+                self.screen.blit(question_p2, p2Rect)
+                pygame.display.flip()
+            # Raise flag
             elif self.collide(player, jordan) == True:
                 flagBoi = True
-
-            elif flagBoi == True:
-
-                question = self.baseFont.render("Given 50 bikes, each with a tank that can go 100 km: how many kms can you go? (press q to restart, press enter to submit, no numPad): ", True, (0, 0, 0))
-                questionRect = question.get_rect()
-                questionRect.centerx = 620
-                questionRect.top = 300
-                self.screen.blit(question, questionRect)
-                pygame.display.flip()
-
+    # Sam's state
     def samsRoom(self):
+        # Set flags
+        flagBoi = False
         self.answer = ''
         self.check = '69'
+        # Create objects in room
         player = char.Char(self.screen, self.pick, 100, 700)
         sam = char.Char(self.screen, 'sam', 640, 200)
         backDoor = door.Door(self.screen, 0, 800)
-        flagBoi = False
-
+        npcs = [sam]
+        doors = [backDoor]
+        # Create game state
         while True:
             self.state = "sam"
-            backDoor.blitme()
-            sam.blitme()
-            pygame.display.flip()
+            # Blit objects inroom
             self.check_events(player)
-            player.update()
             image = pygame.transform.scale(pygame.image.load(os.path.join(os.getcwd(), "images/samRoom.png")), (self.height, self.width))
-            self.screen.blit(image, (0, 0))
-            self.updateScreen(image, player)
-            pygame.display.flip()
+            player.update()
+            self.updateScreen(image, player, npcs, doors)
+            # Room logic
             if self.collide(player, backDoor) == True:
                 self.secondHallway()
                 return None
+            # Problem to solve
+            elif flagBoi == True:
+                # Set question
+                question_p1 = self.baseFont.render("What is sam's player level in tetris?", True, (0, 0, 0))
+                question_p2 = self.baseFont.render("(press q to restart, press enter to submit)", True, (0, 0, 0))
+                # Obtain rects
+                p1Rect = question_p1.get_rect()
+                p1Rect.centerx = 620
+                p1Rect.bottom = 300
+                p2Rect = question_p2.get_rect()
+                p2Rect.centerx = 620
+                p2Rect.top = 300
+                # Blit question
+                self.screen.blit(question_p1, p1Rect)
+                self.screen.blit(question_p2, p2Rect)
+                pygame.display.flip()
+            # Raise flag
             elif self.collide(player, sam) == True:
                 flagBoi = True
-
-            elif flagBoi == True:
-                question = self.baseFont.render("what is sam's player level in tetris?: (q to reset, enter to submit) ", True, (0, 0, 0))
-                questionRect = question.get_rect()
-                questionRect.centerx = 620
-                questionRect.top = 300
-                self.screen.blit(question, questionRect)
-                pygame.display.flip()
-
+    # Event handler
     def check_events(self, player):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -446,6 +441,7 @@ class Controller:
                 elif event.key == pygame.K_0:
                     self.answer += "0"
                 elif event.key == pygame.K_RETURN:
+                    # Checks answer for jordan's room
                     if self.state == 'jordan':
                         if self.answer == self.check:
                             self.health = 100
@@ -454,11 +450,12 @@ class Controller:
                             return None
                         else:
                             self.health -= 69
-                            self.spawnRoom(self.pick, 640, 400)
+                            self.spawnRoom(640, 400)
                             return None
+                    # Checks answer for sam's room
                     elif self.state == 'sam':
                         if self.answer == self.check:
-                            self.gamewon()
+                            self.gameWon()
                             return None
                         else:
                             self.health -= 100
@@ -471,7 +468,7 @@ class Controller:
                     player.moving_up = False
                 elif event.key == pygame.K_DOWN:
                     player.moving_down = False
-
+    # Handles blitting and flipping
     def updateScreen(self, image, player, npcs, doors):
         self.screen.blit(image, (0,0))
         player.blitme()
@@ -481,7 +478,7 @@ class Controller:
           door.blitme()
         pygame.display.set_caption("The Best Core Project, No Contest. HP: {}% Pizza Count: {}".format(self.health, self.counter))
         pygame.display.flip()
-
+    # Checks for collisions
     def collide(self, player, object):
         if player.rect.colliderect(object):
             return True
