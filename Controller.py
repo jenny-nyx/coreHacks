@@ -50,3 +50,19 @@ class Controller(event_handler.Mixin, updateScreen.Mixin, collision.Mixin,
                                          'images/boy.png')
         self.char_buttons.add(self.girl_button)
         self.char_buttons.add(self.boy_button)
+
+    # Handles blitting and flipping
+    def updateScreen(self, image, player, npcs, doors):
+        self.screen.blit(image, (0,0))
+        player.blitme()
+        for npc in npcs:
+          npc.blitme()
+        for door in doors:
+          door.blitme()
+        pygame.display.set_caption("The Best Core Project, No Contest. HP: {}% Pizza Count: {}".format(self.health, self.counter))
+        pygame.display.flip()
+
+    # Checks for collisions
+    def collide(self, player, object):
+        if player.rect.colliderect(object):
+            return True
