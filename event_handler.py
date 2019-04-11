@@ -25,7 +25,7 @@ class Mixin:
                     player.moving_down = True
                 elif event.key == pygame.K_BACKQUOTE: # ` or tilda
                     self.answer = ""
-                elif event.key == pygame.BACKSPACE:
+                elif event.key == pygame.K_BACKSPACE:
                     self.answer -= self.answer[answer.length-1]
                 elif event.key == pygame.K_1:
                     self.answer += "1"
