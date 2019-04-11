@@ -23,7 +23,7 @@ class Mixin:
                     player.moving_up = True
                 elif event.key == pygame.K_DOWN:
                     player.moving_down = True
-                elif event.key == pygame.K_BACKQUOTE: # ` or tilda
+                elif event.key == pygame.K_BACKQUOTE and event.key == pygame.K_RSHIFT or event.key == pygame.K_LSHIFT: # 
                     self.answer = ""
                 elif event.key == pygame.K_BACKSPACE:
                     self.answer -= self.answer[answer.length-1]
