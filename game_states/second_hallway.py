@@ -13,7 +13,7 @@ class Mixin:
         # Create objects in room
         player = char.Char(self.screen, self.pick, 640, 575)
         backDoor = door.Door(self.screen, 640, 800)
-        jordansDoor = door.Door(self.screen, 800, 500)
+        jordansDoor = door.Door(self.screen, 750, 500)
         samsDoor = door.Door(self.screen, 640, 200)
         npcs = []
         doors = [backDoor, jordansDoor, samsDoor]
