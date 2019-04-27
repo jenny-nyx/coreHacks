@@ -23,8 +23,9 @@ class Mixin:
                     player.moving_up = True
                 elif event.key == pygame.K_DOWN:
                     player.moving_down = True
-                elif event.key == pygame.K_RSHIFT or event.key == pygame.K_LSHIFT:
-                    if event.key == pygame.K_BACKQUOTE: 
+
+                elif pygame.key.get_pressed()[pygame.K_RSHIFT] or pressed[pygame.K_LSHIFT]:
+                    if pressed[pygame.K_BACKQUOTE]:
                         self.answer = ""
                 elif event.key == pygame.K_BACKSPACE:
                     self.answer = self.answer[:-1]
@@ -107,11 +108,14 @@ class Mixin:
                             self.health = 100
                             self.key3 = True
                             self.secondHallway()
+                            print(self.answer)
                             return None
                         else:
                             self.health -= 69
                             self.spawnRoom(640, 400)
+                            print(self.answer)
                             return None
+
                     # Checks answer for sam's room
                     elif self.state == 'sam':
                         if self.answer == self.check:

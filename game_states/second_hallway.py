@@ -6,7 +6,6 @@ from objects import buttons, char, pizza, door
 # Main class
 import Controller
 
-
 class Mixin:
     # Second hallway state
     def secondHallway(self):
